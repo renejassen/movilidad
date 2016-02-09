@@ -3455,13 +3455,12 @@ SELECT DISTINCT (A.CODIGO_ACCIDENTE) AS CODIGO_ACCIDENTE, --Listo 1
                           NULL AS VIA_VISUAL_NORMAL, --***
                           NULL AS VIA_TIPO_ELEMENTO_DISM_VIS, --***
                           /*Lesion*/
-                          /*NVL(L.CODIGO_LESION, ' ')*/
-                          NULL AS LESION_CODIGO_TIPO,
-                          /*NVL((SELECT NOMBRE
+                          NVL(L.CODIGO_LESION, ' ') AS LESION_CODIGO_TIPO
+                          /*NULL AS LESION_CODIGO_TIPO*/,
+                          NVL((SELECT NOMBRE
                               FROM TIPOS_LESIONES TP
                            WHERE TP.CODIGO_LESION = L.CODIGO_LESION),
-                          ' ')*/
-                          NULL AS LESION_NOMBRE_TIPO,
+                          ' ') AS LESION_NOMBRE_TIPO,
                           NVL(FN_DOMVALOR('cDomAccCondicionVictima',
                                           V.CONDICION),
                               'CONDUCTOR') || ' - ' ||
@@ -3766,13 +3765,12 @@ SELECT DISTINCT (A.CODIGO_ACCIDENTE) AS CODIGO_ACCIDENTE, --Listo 1
                           NULL AS VIA_VISUAL_NORMAL, --***
                           NULL AS VIA_TIPO_ELEMENTO_DISM_VIS, --***
                           /*Lesion*/
-                          /*NVL(L.CODIGO_LESION, ' ')*/
-                          NULL AS LESION_CODIGO_TIPO,
-                          /*NVL((SELECT NOMBRE
+                          NVL(L.CODIGO_LESION, ' ') AS LESION_CODIGO_TIPO
+                          /*NULL AS LESION_CODIGO_TIPO*/,
+                          NVL((SELECT NOMBRE
                               FROM TIPOS_LESIONES TP
                            WHERE TP.CODIGO_LESION = L.CODIGO_LESION),
-                          ' ')*/
-                          NULL AS LESION_NOMBRE_TIPO,
+                          ' ') AS LESION_NOMBRE_TIPO,
                           NVL(FN_DOMVALOR('cDomAccCondicionVictima',
                                           V.CONDICION),
                               'CONDUCTOR') || ' - ' ||
@@ -3976,7 +3974,7 @@ SELECT DISTINCT (A.CODIGO_ACCIDENTE) AS CODIGO_ACCIDENTE, --Listo 1
                           0 as coordenadax,
                           0 as coordenaday,
                           /*Victimas*/
-                          0 VICTIMA_NUMERO, --Listo
+                          V.CODIGO_VICTIMA AS VICTIMA_NUMERO, --Listo
                           ' ' AS VICTIMA_NOMBRE, --Listo
                           NULL AS VICTIMA_FECHA_NACIMIENTO, --Listo
                           0 VICTIMA_EDAD, --Listo
@@ -4004,7 +4002,7 @@ SELECT DISTINCT (A.CODIGO_ACCIDENTE) AS CODIGO_ACCIDENTE, --Listo 1
                           ' ' AS VICTIMA_NACIONALIDAD, --Listo ***
                           
                           /*Conductor*/
-                          NULL AS VEHICULO_NUMERO,
+                          V.CODIGO_VEHICULO AS VEHICULO_NUMERO,
                           NULL AS CONDUCTOR_NOMBRE,
                           NULL AS CONDUCTOR_FECHA_NACIMIENTO,
                           NULL AS CONDUCTOR_EDAD,
@@ -4087,10 +4085,10 @@ SELECT DISTINCT (A.CODIGO_ACCIDENTE) AS CODIGO_ACCIDENTE, --Listo 1
                           NVL(V.CODIGO_ACCIDENTADO, 0) AS VICTIMA_EXAMEN,
                           NVL(FN_DOMVALOR('cDomAccExamenes', EX.EXAMEN),
                               ' ') AS VICTIMA_FORMULARIO,
-                          NVL(FN_DOMVALOR('cDomAccResultados',
+                          NVL(FN_DOMVALOR('cDomAccGradoExamen',
                                           EX.GRADO_EXAMEN),
                               ' ') AS VICTIMA_GRADO_EXAMEN,
-                          NVL(FN_DOMVALOR('cDomAccGradoExamen',
+                          NVL(FN_DOMVALOR('cDomAccResultados',
                                           EX.RESULTADO_EXAMEN),
                               ' ') AS VICTIMA_RESULTADO_EXAMEN,
                           
@@ -4112,7 +4110,7 @@ SELECT DISTINCT (A.CODIGO_ACCIDENTE) AS CODIGO_ACCIDENTE, --Listo 1
       ELSIF PLISTA_FORMULARIOS IS NULL AND PFECHA_DESDE IS NOT NULL AND
             PFECHA_HASTA IS NOT NULL THEN
         OPEN PCURSOR FOR
-          SELECT DISTINCT (A.CODIGO_ACCIDENTE) AS CODIGO_ACCIDENTE, --Listo 1
+           SELECT DISTINCT (A.CODIGO_ACCIDENTE) AS CODIGO_ACCIDENTE, --Listo 1
                           A.FORMULARIO AS NUMERO_FORMULARIO, --Listo 2
                           TO_CHAR(TRUNC(A.FECHA), 'DAY') AS NOMBRE_DIA, --Listo 3
                           TRUNC(A.FECHA) FECHA_INFORME, --Listo 4
@@ -4279,7 +4277,7 @@ SELECT DISTINCT (A.CODIGO_ACCIDENTE) AS CODIGO_ACCIDENTE, --Listo 1
                           0 as coordenadax,
                           0 as coordenaday,
                           /*Victimas*/
-                          0 VICTIMA_NUMERO, --Listo
+                          V.CODIGO_VICTIMA AS VICTIMA_NUMERO, --Listo
                           ' ' AS VICTIMA_NOMBRE, --Listo
                           NULL AS VICTIMA_FECHA_NACIMIENTO, --Listo
                           0 VICTIMA_EDAD, --Listo
@@ -4307,7 +4305,7 @@ SELECT DISTINCT (A.CODIGO_ACCIDENTE) AS CODIGO_ACCIDENTE, --Listo 1
                           ' ' AS VICTIMA_NACIONALIDAD, --Listo ***
                           
                           /*Conductor*/
-                          NULL AS VEHICULO_NUMERO,
+                          V.CODIGO_VEHICULO AS VEHICULO_NUMERO,
                           NULL AS CONDUCTOR_NOMBRE,
                           NULL AS CONDUCTOR_FECHA_NACIMIENTO,
                           NULL AS CONDUCTOR_EDAD,
@@ -4390,10 +4388,10 @@ SELECT DISTINCT (A.CODIGO_ACCIDENTE) AS CODIGO_ACCIDENTE, --Listo 1
                           NVL(V.CODIGO_ACCIDENTADO, 0) AS VICTIMA_EXAMEN,
                           NVL(FN_DOMVALOR('cDomAccExamenes', EX.EXAMEN),
                               ' ') AS VICTIMA_FORMULARIO,
-                          NVL(FN_DOMVALOR('cDomAccResultados',
+                          NVL(FN_DOMVALOR('cDomAccGradoExamen',
                                           EX.GRADO_EXAMEN),
                               ' ') AS VICTIMA_GRADO_EXAMEN,
-                          NVL(FN_DOMVALOR('cDomAccGradoExamen',
+                          NVL(FN_DOMVALOR('cDomAccResultados',
                                           EX.RESULTADO_EXAMEN),
                               ' ') AS VICTIMA_RESULTADO_EXAMEN,
                           

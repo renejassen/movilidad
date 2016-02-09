@@ -284,7 +284,7 @@ SELECT DISTINCT (A.CODIGO_ACCIDENTE) AS CODIGO_ACCIDENTE, --Listo 1
                 NVL(FN_DOMVALOR('cDomAccRestriccionPase',
                                 CON.RESTRICCIONES),
                     ' ') AS CONDUCTOR_NOMBRE_RESTRICCION,
-                TRUNC(CON.FECHA_LICENCIA) AS CONDUCTOR_FECHA_VEN_LICENCIA,
+                FN_FECHA_VEN_EXP(TO_CHAR(TRUNC(CON.FECHA_LICENCIA)), 'VEN') AS CONDUCTOR_FECHA_VEN_LICENCIA, --Corregido con una función--Llevar la función
                 NVL(CON.PROPIETARIO, ' ') AS CONDUCTOR_PROPIETARIO_VEHICULO,
                 NVL(CON.NOMBRE_PROPIETARIO, ' ') || ' ' ||
                 NVL(CON.PRIMERAPELLIDO_PROPIETARIO, ' ') || ' ' ||
@@ -319,10 +319,9 @@ SELECT DISTINCT (A.CODIGO_ACCIDENTE) AS CODIGO_ACCIDENTE, --Listo 1
                 NVL(V.COLOR, ' ') AS VEHICULO_COLOR,
                 NVL(V.REV_TECNICOMECANICA, ' ') AS VEHICULO_NUMERO_REV_TECNO,
                 NVL(V.EMPRESA, ' ') AS VEHICULO_CODIGO_EMPRESA_PERT,
-                NVL((SELECT E.NOMBRE
+                (SELECT E.NOMBRE
                       FROM SIGAT.EMPRESAS E
-                     WHERE E.CODIGO_EMPRESA = V.EMPRESA),
-                    'NO EXISTE') AS VEHICULO_NOMBRE_EMPRESA_PERT,
+                     WHERE E.CODIGO_EMPRESA = V.EMPRESA) AS VEHICULO_NOMBRE_EMPRESA_PERT, --Corregido
                 NVL(FN_DOMVALOR('cDomAccTipoInmovilizadores',
                                 V.INMOVILIZADO),
                     ' ') AS VEHICULO_LUGAR_FUE_INMOVIL,
@@ -343,7 +342,7 @@ SELECT DISTINCT (A.CODIGO_ACCIDENTE) AS CODIGO_ACCIDENTE, --Listo 1
                     ' ') AS VEHICULO_NOMB_TIPO_FALLA,
                 NVL(FN_DOMVALOR('cDomAccTipoInmovilizadores',
                                 V.INMOVILIZADO) || SIGAT.FN_GUION(V.OTRO_INMOVILIZADO) || V.OTRO_INMOVILIZADO,
-                    ' ') AS VEHICULO_INMOVILIZADO_EN,
+                    ' ') AS VEHICULO_INMOVILIZADO_EN, --Corregido
                 NVL(V.DETALLE_DISPOSICION, ' ') AS VEHICULO_A_DISPOSICION_DE,
 
                 NULL AS VIA_NUMERO_VIA_FORM,
@@ -395,6 +394,6 @@ SELECT DISTINCT (A.CODIGO_ACCIDENTE) AS CODIGO_ACCIDENTE, --Listo 1
    AND c.unidad = ut.codigo_unidad(+)
       --AND C.ESTADO IN ('0', '1', '2')
    AND A.FORMULARIO IN
-       ('A1515888', 'A200008');
+       ('A200004', 'A200008');
 
-       SELECT SIGAT.FN_GUION('AAA') FROM DUAL;
+       --SELECT SIGAT.FN_GUION(NULL) FROM DUAL;
