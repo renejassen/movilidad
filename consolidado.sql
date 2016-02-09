@@ -379,19 +379,16 @@
             FROM SIGAT.ACCIDENTE   A,
                  SIGAT.VICTIMAS    C,
                  SIGAT.CONDUCTORES CON,
-                 --         SIGAT.VIAS        VI,
-                 --        SIGAT.LESIONES    L,
                  SIGAT.VEHICULOS   VH,
                  grados_transito   gt,
                  unidades_transito ut
            WHERE C.CODIGO_ACCIDENTE = A.CODIGO_ACCIDENTE(+)
              AND C.CODIGO_ACCIDENTADO = CON.CODIGO_ACCIDENTADO(+)
-                --    AND A.CODIGO_ACCIDENTE = VI.CODIGO_ACCIDENTE(+)
-                -- AND C.CODIGO_ACCIDENTADO = L.CODIGO_ACCIDENTADO(+)
              AND VH.CODIGO_ACCIDENTE(+) = A.CODIGO_ACCIDENTE
              --AND C.CODIGO_VEHICULO = VH.CODIGO_VEHICULO
              AND c.grado_oficial = gt.codigo_grado(+)
              AND c.unidad = ut.codigo_unidad(+)
+             AND c.codigo_victima != 0
              AND (TRUNC(A.FECHA) BETWEEN NVL('01/09/2014', TRUNC(A.FECHA)) AND
-                 NVL('15/09/2014', TRUNC(A.FECHA)))
+                 NVL('01/09/2014', TRUNC(A.FECHA)))
            ORDER BY A.FORMULARIO;
